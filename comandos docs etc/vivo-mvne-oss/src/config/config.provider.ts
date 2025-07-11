@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import { CONFIG_PATH, DEFAULT_CONFIG_PATH } from './config.constants';
+import type { Knex } from 'knex';
+import type { HttpModuleOptions } from '@nestjs/axios';
 
 export class ConfigProvider {
   private readonly config: Record<string, string | undefined>;
@@ -26,6 +28,24 @@ export class ConfigProvider {
     }
 
     return value;
+  }
+
+  getKnexConfig(): Knex.Config {
+    return {
+      client: 'pg',
+      connection: this.get('PG_CONNECTION_STRING'),
+      searchPath: [this.get('PG_SEARCH_PATH'), 'public'],
+      pool: {
+        min: this.getNumber('PG_POOL_MIN'),
+        max: this.getNumber('PG_POOL_MAX'),
+      },
+    };
+  }
+
+  getHttpSiganConfig(): HttpModuleOptions {
+    return {
+      baseURL: this.get('HTTP_SIGAN_URL'),
+    };
   }
 
   getOptional(key: string): string | undefined {

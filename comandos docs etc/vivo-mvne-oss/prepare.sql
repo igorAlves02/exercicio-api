@@ -1,0 +1,14 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE SCHEMA IF NOT EXISTS oss;
+CREATE SCHEMA IF NOT EXISTS bss_core;
+
+CREATE TABLE IF NOT EXISTS bss_core.carrier (
+    tag VARCHAR(32) PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS bss_core.line (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY
+);
+CREATE TABLE IF NOT EXISTS bss_core.address (
+    hash CHAR(32) PRIMARY KEY
+);

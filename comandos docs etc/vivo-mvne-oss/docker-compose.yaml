@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17.5
+    container_name: postgres
+    environment:
+      POSTGRES_DB: zup
+      POSTGRES_USER: zup
+      POSTGRES_PASSWORD: zup
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./prepare.sql:/docker-entrypoint-initdb.d/prepare.sql
+
+  mocko:
+    image: 'gabrielctpinheiro/mocko-proxy:latest'
+    ports:
+      - '8081:8080'
+    volumes:
+      - './mocks:/home/mocko/mocks'
