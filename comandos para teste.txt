@@ -1,0 +1,12 @@
+Teste 1: Request Básico (só areaCode)
+curl -X POST http://localhost:3000/previews -H "Content-Type: application/json" -d "{\"areaCode\": \"11\"}"
+
+Teste 2: Request Completo (com previousId)
+curl -X POST http://localhost:3000/previews -H "Content-Type: application/json" -d "{\"areaCode\": \"21\", \"previousId\": \"550e8400-e29b-41d4-a716-446655440000\"}"
+
+Teste 3: Request Inválido (para ver validação funcionando)
+curl -X POST http://localhost:3000/previews -H "Content-Type: application/json" -d "{\"areaCode\": \"1\"}"
+
+Teste 4: Diferentes códigos de área
+curl -X POST http://localhost:3000/previews -H "Content-Type: application/json" -d "{\"areaCode\": \"47\"}"
+

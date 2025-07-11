@@ -1,0 +1,49 @@
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
+import { CONFIG_PATH, DEFAULT_CONFIG_PATH } from './config.constants';
+
+export class ConfigProvider {
+  private readonly config: Record<string, string | undefined>;
+
+  constructor(configPath: string, defaultConfigPath: string) {
+    this.assertConfig(configPath, defaultConfigPath);
+    this.config = { ...this.fromFile(configPath), ...process.env };
+  }
+
+  get(key: string): string {
+    const value = this.getOptional(key);
+    if (typeof value === 'undefined') {
+      throw new Error(`Missing '${key}' config`);
+    }
+
+    return value.toString();
+  }
+
+  getNumber(key: string): number {
+    const value = Number(this.get(key));
+    if (isNaN(value)) {
+      throw new TypeError(`The config '${key}' isn't a number`);
+    }
+
+    return value;
+  }
+
+  getOptional(key: string): string | undefined {
+    return this.config[key];
+  }
+
+  private fromFile(path: string): Record<string, string> {
+    const file = fs.readFileSync(path);
+    return dotenv.parse(file);
+  }
+
+  private assertConfig(configPath: string, defaultConfigPath: string) {
+    if (fs.existsSync(configPath)) {
+      return;
+    }
+
+    fs.copyFileSync(defaultConfigPath, configPath);
+  }
+}
+
+export const config = new ConfigProvider(CONFIG_PATH, DEFAULT_CONFIG_PATH);
