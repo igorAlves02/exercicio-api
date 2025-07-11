@@ -1,2 +1,2 @@
 # exercicio-api
-api desenvolvida em node js
+api desenvolvida em node js.
